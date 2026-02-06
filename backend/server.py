@@ -571,6 +571,9 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
 # Include the router in the main app
 app.include_router(api_router)
 
+# Mount static files for uploads (after router to avoid path conflicts)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
