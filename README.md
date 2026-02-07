@@ -452,7 +452,7 @@ sudo systemctl status mongodb
 ```
 MIT License
 
-Copyright (c) 2024 Your Name
+Copyright (c) 2024 MamawliV2
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -488,9 +488,9 @@ SOFTWARE.
 
 ## 📞 پشتیبانی
 
-- 📧 ایمیل: your.email@example.com
+- 📧 ایمیل: mamawli@proton.me
 - 🐙 GitHub Issues: [لینک](https://github.com/MamawliV2/PicoChat/issues)
-- 💬 تلگرام: [@your_telegram](https://t.me/your_telegram)
+- 💬 تلگرام: [@MamawliV2](https://t.me/your_telegram)
 
 ---
 
