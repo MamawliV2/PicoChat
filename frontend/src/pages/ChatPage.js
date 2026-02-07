@@ -161,6 +161,30 @@ export default function ChatPage() {
         setNewMessage('');
         setShowEmoji(false);
 
+        // ساخت پیام موقت برای نمایش فوری
+        const tempMessage = {
+            id: 'temp-' + Date.now(),
+            conversation_id: conversation.id,
+            sender_id: user?.id,
+            sender_name: user?.display_name,
+            content: messageContent,
+            type: 'text',
+            file_url: null,
+            reply_to: replyTo ? {
+                id: replyTo.id,
+                content: replyTo.content,
+                sender_name: replyTo.sender_name,
+                type: replyTo.type
+            } : null,
+            timestamp: new Date().toISOString(),
+            status: 'sending'
+        };
+
+        // اضافه کردن فوری به لیست پیام‌ها
+        setMessages(prev => [...prev, tempMessage]);
+        setReplyTo(null);
+
+        // ارسال با WebSocket
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({
                 type: 'message',
@@ -169,8 +193,24 @@ export default function ChatPage() {
                 msg_type: 'text',
                 reply_to: replyTo?.id
             }));
+        } else {
+            // Fallback به HTTP اگر WebSocket وصل نبود
+            try {
+                const response = await axios.post(`${API}/api/messages/${conversation.id}`, {
+                    content: messageContent,
+                    type: 'text',
+                    reply_to: replyTo?.id
+                });
+                // جایگزینی پیام موقت با پیام واقعی
+                setMessages(prev => prev.map(m => 
+                    m.id === tempMessage.id ? response.data : m
+                ));
+            } catch (error) {
+                toast.error('خطا در ارسال پیام');
+                // حذف پیام موقت در صورت خطا
+                setMessages(prev => prev.filter(m => m.id !== tempMessage.id));
+            }
         }
-        setReplyTo(null);
     };
 
     // Handle typing
