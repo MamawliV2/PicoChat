@@ -130,6 +130,53 @@ export default function ChatPage() {
         };
     }, [token, conversation?.id]);
 
+    // Polling برای دریافت پیام‌های جدید و وضعیت آنلاین (هر 3 ثانیه)
+    useEffect(() => {
+        if (!conversation) return;
+
+        const pollMessages = async () => {
+            try {
+                const response = await axios.get(`${API}/api/messages/${conversation.id}`);
+                setMessages(prev => {
+                    // فقط پیام‌های جدید رو اضافه کن
+                    const prevIds = new Set(prev.filter(m => !m.id.startsWith('temp-')).map(m => m.id));
+                    const newMessages = response.data.filter(m => !prevIds.has(m.id));
+                    if (newMessages.length > 0) {
+                        return [...prev.filter(m => !m.id.startsWith('temp-')), ...response.data];
+                    }
+                    return prev;
+                });
+            } catch (error) {
+                console.error('Poll messages error:', error);
+            }
+        };
+
+        const interval = setInterval(pollMessages, 3000);
+        return () => clearInterval(interval);
+    }, [conversation]);
+
+    // Polling برای وضعیت آنلاین کاربران (هر 5 ثانیه)
+    useEffect(() => {
+        const pollUsers = async () => {
+            try {
+                const response = await axios.get(`${API}/api/users`);
+                setUsers(response.data);
+                // آپدیت وضعیت کاربر انتخاب شده
+                if (selectedUser) {
+                    const updated = response.data.find(u => u.id === selectedUser.id);
+                    if (updated) {
+                        setSelectedUser(updated);
+                    }
+                }
+            } catch (error) {
+                console.error('Poll users error:', error);
+            }
+        };
+
+        const interval = setInterval(pollUsers, 5000);
+        return () => clearInterval(interval);
+    }, [selectedUser]);
+
     // Scroll to bottom
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
