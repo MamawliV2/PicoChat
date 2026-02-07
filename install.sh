@@ -111,10 +111,14 @@ install_python() {
         PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
         print_success "Python $PYTHON_VERSION موجود است"
     else
-        print_warning "نصب Python 3.11..."
+        print_warning "نصب Python 3..."
         apt-get update -qq
-        apt-get install -y -qq python3 python3-pip python3-venv
+        apt-get install -y -qq python3 python3-pip
     fi
+    
+    # نصب python3-venv (الزامی برای محیط مجازی)
+    print_info "نصب python3-venv..."
+    apt-get install -y -qq python3-venv python3-dev
 }
 
 # نصب Node.js
