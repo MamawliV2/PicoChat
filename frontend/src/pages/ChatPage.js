@@ -112,8 +112,12 @@ export default function ChatPage() {
             }
         };
 
-        websocket.onclose = () => {
-            console.log('WebSocket disconnected');
+        websocket.onclose = (event) => {
+            console.log('WebSocket disconnected', event.code, event.reason);
+        };
+
+        websocket.onerror = (error) => {
+            console.error('WebSocket error:', error);
         };
 
         setWs(websocket);
