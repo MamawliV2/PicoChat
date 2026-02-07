@@ -742,7 +742,7 @@ export default function ChatPage() {
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </>
                 ) : (
                     <div className={`flex-1 flex items-center justify-center p-8 ${isMobile ? 'hidden' : ''}`}>
                         <div className="text-center">
