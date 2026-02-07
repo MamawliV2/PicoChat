@@ -553,16 +553,25 @@ export default function ChatPage() {
                                             accept="image/*,video/*"
                                             className="hidden"
                                         />
-                                        <Input
+                                        <Textarea
                                             value={newMessage}
                                             onChange={(e) => {
                                                 setNewMessage(e.target.value);
                                                 handleTyping();
                                             }}
-                                            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                                             placeholder="پیام..."
                                             data-testid="message-input"
-                                            className="flex-1 rounded-full bg-secondary/50 border-0 h-10 md:h-11 text-base"
+                                            className="flex-1 rounded-2xl bg-secondary/50 border-0 min-h-[40px] max-h-[120px] resize-none text-base px-4 py-2.5"
+                                            rows={1}
+                                            style={{
+                                                height: 'auto',
+                                                minHeight: '40px',
+                                                maxHeight: '120px'
+                                            }}
+                                            onInput={(e) => {
+                                                e.target.style.height = 'auto';
+                                                e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+                                            }}
                                         />
                                         {newMessage.trim() ? (
                                             <Button
