@@ -130,7 +130,7 @@ export default function ChatPage() {
         };
     }, [token, conversation?.id]);
 
-    // Polling برای دریافت پیام‌های جدید و وضعیت آنلاین (هر 3 ثانیه)
+    // Polling برای دریافت پیام‌های جدید (هر 3 ثانیه)
     useEffect(() => {
         if (!conversation) return;
 
@@ -138,13 +138,19 @@ export default function ChatPage() {
             try {
                 const response = await axios.get(`${API}/api/messages/${conversation.id}`);
                 setMessages(prev => {
-                    // فقط پیام‌های جدید رو اضافه کن
-                    const prevIds = new Set(prev.filter(m => !m.id.startsWith('temp-')).map(m => m.id));
-                    const newMessages = response.data.filter(m => !prevIds.has(m.id));
-                    if (newMessages.length > 0) {
-                        return [...prev.filter(m => !m.id.startsWith('temp-')), ...response.data];
+                    // ID های پیام‌های فعلی (بدون temp)
+                    const currentIds = new Set(prev.filter(m => !m.id.startsWith('temp-')).map(m => m.id));
+                    // پیام‌های جدیدی که قبلاً نداشتیم
+                    const newMessages = response.data.filter(m => !currentIds.has(m.id));
+                    
+                    // اگر پیام جدیدی نیست، چیزی تغییر نکنه
+                    if (newMessages.length === 0) {
+                        return prev;
                     }
-                    return prev;
+                    
+                    // فقط پیام‌های جدید رو به آخر اضافه کن
+                    const withoutTemp = prev.filter(m => !m.id.startsWith('temp-'));
+                    return [...withoutTemp, ...newMessages];
                 });
             } catch (error) {
                 console.error('Poll messages error:', error);
