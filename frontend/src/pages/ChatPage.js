@@ -54,6 +54,7 @@ export default function ChatPage() {
     
     const messagesEndRef = useRef(null);
     const fileInputRef = useRef(null);
+    const textareaRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
     const recordingIntervalRef = useRef(null);
