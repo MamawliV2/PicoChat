@@ -771,19 +771,19 @@ function MessageBubble({ message, isMe, onReply, isMobile }) {
                     </div>
                 );
             default:
-                return <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>;
+                return <p className="text-sm whitespace-pre-wrap break-words overflow-hidden" style={{ wordBreak: 'break-word' }}>{message.content}</p>;
         }
     };
 
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
             className={`flex ${isMe ? 'justify-start' : 'justify-end'} group`}
             data-testid={`message-${message.id}`}
         >
-            <div className={`max-w-[85%] md:max-w-[75%] ${isMe ? 'order-1' : 'order-2'}`}>
+            <div className={`max-w-[80%] md:max-w-[70%] min-w-0 ${isMe ? 'order-1' : 'order-2'}`}>
                 {/* Reply Preview */}
                 {message.reply_to && (
                     <div className={`mb-1 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs ${
@@ -798,7 +798,7 @@ function MessageBubble({ message, isMe, onReply, isMobile }) {
                 
                 {/* Message Content */}
                 <div
-                    className={`px-3 md:px-4 py-2 md:py-2.5 ${
+                    className={`px-3 md:px-4 py-2 md:py-2.5 overflow-hidden ${
                         isMe 
                             ? 'bg-primary text-primary-foreground bubble-me' 
                             : 'bg-secondary text-secondary-foreground bubble-other'
