@@ -477,11 +477,11 @@ export default function ChatPage() {
             </AnimatePresence>
 
             {/* Chat Area */}
-            <div className={`flex-1 flex flex-col bg-background ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
+            <div className={`flex-1 flex flex-col bg-background min-h-0 ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
                 {selectedUser ? (
                     <>
                         {/* Chat Header */}
-                        <div className="glass p-3 md:p-4 flex items-center gap-3">
+                        <div className="shrink-0 bg-card border-b border-border p-3 md:p-4 flex items-center gap-3 sticky top-0 z-10">
                             {isMobile && (
                                 <Button
                                     variant="ghost"
@@ -493,7 +493,7 @@ export default function ChatPage() {
                                     <ArrowRight className="h-5 w-5" />
                                 </Button>
                             )}
-                            <div className="relative">
+                            <div className="relative shrink-0">
                                 <Avatar className="h-10 w-10">
                                     <AvatarFallback className="bg-secondary">
                                         {selectedUser.display_name?.[0]?.toUpperCase()}
