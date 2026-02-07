@@ -634,7 +634,7 @@ export default function ChatPage() {
                                                 width="100%"
                                                 height={isMobile ? 280 : 350}
                                                 searchPlaceholder="جستجوی ایموجی..."
-                                                suggestedEmojisMode="none"
+                                                previewConfig={{ showPreview: false }}
                                             />
                                         </motion.div>
                                     )}
