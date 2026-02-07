@@ -177,18 +177,7 @@ export default function ChatPage() {
         return () => clearInterval(interval);
     }, [selectedUser]);
 
-    // Scroll to bottom - فقط وقتی پیام جدید اضافه شد
-    const prevMessagesCount = useRef(0);
-    useEffect(() => {
-        // فقط اگر تعداد پیام‌ها بیشتر شد، اسکرول کن
-        if (messages.length > prevMessagesCount.current) {
-            // با تاخیر کوتاه برای جلوگیری از اسکرول ناگهانی
-            setTimeout(() => {
-                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        }
-        prevMessagesCount.current = messages.length;
-    }, [messages.length]);
+    // بدون اسکرول خودکار - کاربر خودش اسکرول می‌کنه
 
     // Select user and get/create conversation
     const selectUser = async (selectedUserData) => {
