@@ -284,22 +284,18 @@ get_user_input() {
 clone_project() {
     print_step "دانلود PicoChat..."
     
-    # ساخت دایرکتوری نصب
-    mkdir -p "$INSTALL_DIR"
+    # حذف دایرکتوری قبلی اگر وجود داشت
+    if [ -d "$INSTALL_DIR" ]; then
+        print_warning "دایرکتوری قبلی پاک می‌شود..."
+        rm -rf "$INSTALL_DIR"
+    fi
     
-    # اگر از گیت‌هاب کلون می‌کنیم
-    if [ -d "$INSTALL_DIR/.git" ]; then
-        cd "$INSTALL_DIR"
-        git pull origin main
-    else
-        # اگر فایل‌ها محلی هستند، کپی می‌کنیم
-        if [ -d "./backend" ] && [ -d "./frontend" ]; then
-            cp -r ./backend "$INSTALL_DIR/"
-            cp -r ./frontend "$INSTALL_DIR/"
-        else
-            # کلون از گیت‌هاب
-            git clone https://github.com/MamawliV2/PicoChat.git "$INSTALL_DIR"
-        fi
+    # کلون از گیت‌هاب
+    git clone https://github.com/MamawliV2/PicoChat.git "$INSTALL_DIR"
+    
+    if [ ! -d "$INSTALL_DIR/backend" ] || [ ! -d "$INSTALL_DIR/frontend" ]; then
+        print_error "دانلود ناموفق بود!"
+        exit 1
     fi
     
     print_success "پروژه دانلود شد"
