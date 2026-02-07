@@ -370,11 +370,11 @@ setup_frontend() {
     cd "$INSTALL_DIR/frontend"
     
     # نصب وابستگی‌ها
-    yarn install --silent
+    yarn install --silent --ignore-engines
     
     # ساخت فایل .env
     if [ "$USE_SSL" = true ]; then
-        BACKEND_URL="https://$DOMAIN/api"
+        BACKEND_URL="https://$DOMAIN"
     else
         BACKEND_URL="http://$SERVER_IP:$BACKEND_PORT"
     fi
