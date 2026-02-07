@@ -214,6 +214,11 @@ export default function ChatPage() {
         const messageContent = newMessage;
         setNewMessage('');
         setShowEmoji(false);
+        
+        // ریست سایز textarea
+        if (textareaRef.current) {
+            textareaRef.current.style.height = '44px';
+        }
 
         // ساخت پیام موقت برای نمایش فوری
         const tempMessage = {
