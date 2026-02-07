@@ -515,7 +515,7 @@ export default function ChatPage() {
 
                         {/* Messages */}
                         <div className="flex-1 overflow-y-auto p-3 md:p-4">
-                            <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto">
+                            <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto pb-4">
                                 {messages.map((msg) => (
                                     <MessageBubble
                                         key={msg.id}
@@ -525,7 +525,7 @@ export default function ChatPage() {
                                         isMobile={isMobile}
                                     />
                                 ))}
-                                <div ref={messagesEndRef} />
+                                <div ref={messagesEndRef} className="h-4" />
                             </div>
                         </div>
 
