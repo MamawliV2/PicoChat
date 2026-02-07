@@ -252,6 +252,9 @@ export default function ChatPage() {
         // اضافه کردن فوری به لیست پیام‌ها
         setMessages(prev => [...prev, tempMessage]);
         setReplyTo(null);
+        
+        // اسکرول به پیام جدید
+        scrollToBottom();
 
         // ارسال با WebSocket
         if (ws && ws.readyState === WebSocket.OPEN) {
