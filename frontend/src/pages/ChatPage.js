@@ -519,22 +519,20 @@ export default function ChatPage() {
                         </div>
 
                         {/* Messages */}
-                        <ScrollArea className="flex-1 p-3 md:p-4">
+                        <div className="flex-1 overflow-y-auto p-3 md:p-4">
                             <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto">
-                                <AnimatePresence>
-                                    {messages.map((msg) => (
-                                        <MessageBubble
-                                            key={msg.id}
-                                            message={msg}
-                                            isMe={msg.sender_id === user?.id}
-                                            onReply={() => setReplyTo(msg)}
-                                            isMobile={isMobile}
-                                        />
-                                    ))}
-                                </AnimatePresence>
+                                {messages.map((msg) => (
+                                    <MessageBubble
+                                        key={msg.id}
+                                        message={msg}
+                                        isMe={msg.sender_id === user?.id}
+                                        onReply={() => setReplyTo(msg)}
+                                        isMobile={isMobile}
+                                    />
+                                ))}
                                 <div ref={messagesEndRef} />
                             </div>
-                        </ScrollArea>
+                        </div>
 
                         {/* Reply Preview */}
                         <AnimatePresence>
