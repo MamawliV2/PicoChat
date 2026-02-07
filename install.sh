@@ -158,22 +158,33 @@ install_mongodb() {
     
     if command -v mongod &> /dev/null; then
         print_success "MongoDB موجود است"
+        # اطمینان از اجرا بودن سرویس
+        if ! systemctl is-active --quiet mongod; then
+            systemctl start mongod
+        fi
     else
         print_warning "نصب MongoDB..."
         
+        # تشخیص نسخه Ubuntu
+        UBUNTU_VERSION=$(lsb_release -cs 2>/dev/null || echo "jammy")
+        
         # کلید GPG
-        curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
-            gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg --dearmor
+        curl -fsSL https://pgp.mongodb.com/server-7.0.asc | \
+            gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg 2>/dev/null || true
         
         # اضافه کردن repo
-        echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | \
-            tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+        echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_VERSION}/mongodb-org/7.0 multiverse" | \
+            tee /etc/apt/sources.list.d/mongodb-org-7.0.list
         
         apt-get update -qq
-        apt-get install -y -qq mongodb-org
+        apt-get install -y -qq mongodb-org || {
+            # اگر نصب از repo رسمی نشد، از repo پیش‌فرض Ubuntu استفاده کن
+            print_warning "نصب از repo پیش‌فرض..."
+            apt-get install -y -qq mongodb
+        }
         
-        systemctl start mongod
-        systemctl enable mongod
+        systemctl start mongod || systemctl start mongodb
+        systemctl enable mongod || systemctl enable mongodb
         
         print_success "MongoDB نصب شد"
     fi
