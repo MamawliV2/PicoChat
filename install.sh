@@ -125,13 +125,25 @@ install_python() {
 install_nodejs() {
     print_step "بررسی Node.js..."
     
+    NEED_INSTALL=false
+    
     if command -v node &> /dev/null; then
-        NODE_VERSION=$(node --version)
-        print_success "Node.js $NODE_VERSION موجود است"
+        NODE_VERSION=$(node --version | cut -d'v' -f2 | cut -d'.' -f1)
+        if [ "$NODE_VERSION" -lt 20 ]; then
+            print_warning "نسخه Node.js قدیمی است ($NODE_VERSION). نصب نسخه 20..."
+            NEED_INSTALL=true
+        else
+            print_success "Node.js v$NODE_VERSION موجود است"
+        fi
     else
-        print_warning "نصب Node.js 18..."
-        curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+        NEED_INSTALL=true
+    fi
+    
+    if [ "$NEED_INSTALL" = true ]; then
+        print_warning "نصب Node.js 20..."
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         apt-get install -y -qq nodejs
+        print_success "Node.js $(node --version) نصب شد"
     fi
     
     # نصب yarn
