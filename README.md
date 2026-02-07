@@ -490,9 +490,9 @@ chmod 755 /opt/picochat/backend/uploads
 
 ## 📞 پشتیبانی
 
-- 📧 ایمیل: mamawli@proton.me
+- 📧 ایمیل: shabgard.ao@gmail.com
 - 🐙 GitHub Issues: [لینک](https://github.com/MamawliV2/PicoChat/issues)
-- 💬 تلگرام: [@MamawliV2](https://t.me/MamawliV2)
+- 💬 تلگرام: [@DZ_CT](https://t.me/DZ_CT)
 
 ---
 
