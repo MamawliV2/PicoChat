@@ -71,6 +71,18 @@ export default function ChatPage() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // جلوگیری از resize شدن صفحه وقتی کیبورد باز میشه
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.visualViewport) {
+            const handleViewportChange = () => {
+                document.documentElement.style.setProperty('--vh', `${window.visualViewport.height * 0.01}px`);
+            };
+            window.visualViewport.addEventListener('resize', handleViewportChange);
+            handleViewportChange();
+            return () => window.visualViewport.removeEventListener('resize', handleViewportChange);
+        }
+    }, []);
+
     // Fetch users
     useEffect(() => {
         const fetchUsers = async () => {
