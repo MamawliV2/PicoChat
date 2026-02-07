@@ -655,24 +655,20 @@ export default function ChatPage() {
                                             className="hidden"
                                         />
                                         <Textarea
+                                            ref={textareaRef}
                                             value={newMessage}
                                             onChange={(e) => {
                                                 setNewMessage(e.target.value);
                                                 handleTyping();
+                                                // تنظیم خودکار ارتفاع
+                                                e.target.style.height = '44px';
+                                                e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
                                             }}
                                             placeholder="پیام..."
                                             data-testid="message-input"
-                                            className="flex-1 rounded-2xl bg-secondary/50 border-0 min-h-[44px] max-h-[100px] resize-none text-base px-4 py-2.5 overflow-y-auto"
+                                            className="flex-1 rounded-2xl bg-secondary/50 border-0 resize-none text-base px-4 py-2.5 overflow-y-auto"
                                             rows={1}
-                                            style={{
-                                                height: 'auto',
-                                                minHeight: '40px',
-                                                maxHeight: '120px'
-                                            }}
-                                            onInput={(e) => {
-                                                e.target.style.height = 'auto';
-                                                e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
-                                            }}
+                                            style={{ height: '44px', maxHeight: '100px' }}
                                         />
                                         {newMessage.trim() ? (
                                             <Button
