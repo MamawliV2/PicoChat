@@ -622,13 +622,13 @@ export default function ChatPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-1 md:gap-2">
+                                    <div className="flex items-end gap-1 md:gap-2">
                                         <Button
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => setShowEmoji(!showEmoji)}
                                             data-testid="emoji-btn"
-                                            className="h-10 w-10 rounded-full shrink-0"
+                                            className="h-10 w-10 rounded-full shrink-0 mb-0.5"
                                         >
                                             <Smile className="h-5 w-5" />
                                         </Button>
@@ -637,7 +637,7 @@ export default function ChatPage() {
                                             size="icon"
                                             onClick={() => fileInputRef.current?.click()}
                                             data-testid="attach-btn"
-                                            className="h-10 w-10 rounded-full shrink-0"
+                                            className="h-10 w-10 rounded-full shrink-0 mb-0.5"
                                         >
                                             <Paperclip className="h-5 w-5" />
                                         </Button>
@@ -656,7 +656,7 @@ export default function ChatPage() {
                                             }}
                                             placeholder="پیام..."
                                             data-testid="message-input"
-                                            className="flex-1 rounded-2xl bg-secondary/50 border-0 min-h-[40px] max-h-[120px] resize-none text-base px-4 py-2.5"
+                                            className="flex-1 rounded-2xl bg-secondary/50 border-0 min-h-[44px] max-h-[100px] resize-none text-base px-4 py-2.5 overflow-y-auto"
                                             rows={1}
                                             style={{
                                                 height: 'auto',
