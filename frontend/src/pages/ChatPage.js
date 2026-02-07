@@ -608,8 +608,16 @@ export default function ChatPage() {
                             )}
                         </AnimatePresence>
 
-                        {/* Input Area */}
-                        <div className="shrink-0 bg-card border-t border-border p-3 md:p-4" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+                        {/* Input Area - Fixed at bottom */}
+                        <div 
+                            className="fixed bottom-0 left-0 right-0 bg-card border-t border-border p-3 md:p-4 z-50"
+                            style={{ 
+                                paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+                                right: isMobile ? 0 : 'auto',
+                                left: isMobile ? 0 : '320px',
+                                width: isMobile ? '100%' : 'calc(100% - 320px)'
+                            }}
+                        >
                             <div className="max-w-3xl mx-auto">
                                 {/* Emoji Picker */}
                                 <AnimatePresence>
