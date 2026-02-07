@@ -98,9 +98,12 @@ export default function ChatPage() {
             
             if (data.type === 'new_message') {
                 setMessages(prev => {
-                    const exists = prev.find(m => m.id === data.message.id);
-                    if (exists) return prev;
-                    return [...prev, data.message];
+                    // حذف پیام موقت اگر وجود داشت
+                    const filtered = prev.filter(m => !m.id.startsWith('temp-'));
+                    // چک کردن که پیام تکراری نباشد
+                    const exists = filtered.find(m => m.id === data.message.id);
+                    if (exists) return filtered;
+                    return [...filtered, data.message];
                 });
             } else if (data.type === 'typing') {
                 if (data.conversation_id === conversation?.id) {
