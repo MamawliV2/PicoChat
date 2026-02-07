@@ -14,11 +14,8 @@ import {
     Smile, 
     Paperclip, 
     Mic, 
-    MicOff, 
     X, 
     Reply, 
-    Image as ImageIcon,
-    Video,
     Moon,
     Sun,
     LogOut,
@@ -27,15 +24,10 @@ import {
     CheckCheck,
     Play,
     Pause,
-    MoreVertical
+    ArrowRight,
+    Menu
 } from 'lucide-react';
 import { toast } from 'sonner';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '../components/ui/dropdown-menu';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 const WS_URL = API.replace('https://', 'wss://').replace('http://', 'ws://');
@@ -56,6 +48,8 @@ export default function ChatPage() {
     const [recordingTime, setRecordingTime] = useState(0);
     const [isTyping, setIsTyping] = useState(false);
     const [ws, setWs] = useState(null);
+    const [showSidebar, setShowSidebar] = useState(true);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     
     const messagesEndRef = useRef(null);
     const fileInputRef = useRef(null);
@@ -63,6 +57,17 @@ export default function ChatPage() {
     const audioChunksRef = useRef([]);
     const recordingIntervalRef = useRef(null);
     const typingTimeoutRef = useRef(null);
+
+    // Check mobile
+    useEffect(() => {
+        const handleResize = () => {
+            const mobile = window.innerWidth < 768;
+            setIsMobile(mobile);
+            if (!mobile) setShowSidebar(true);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Fetch users
     useEffect(() => {
@@ -125,6 +130,7 @@ export default function ChatPage() {
     // Select user and get/create conversation
     const selectUser = async (selectedUserData) => {
         setSelectedUser(selectedUserData);
+        if (isMobile) setShowSidebar(false);
         try {
             const convResponse = await axios.post(`${API}/api/conversations/${selectedUserData.id}`);
             setConversation(convResponse.data);
@@ -134,6 +140,12 @@ export default function ChatPage() {
         } catch (error) {
             toast.error('خطا در بارگذاری پیام‌ها');
         }
+    };
+
+    // Back to sidebar (mobile)
+    const goBack = () => {
+        setShowSidebar(true);
+        setSelectedUser(null);
     };
 
     // Send message
@@ -270,123 +282,142 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="chat-container h-screen" dir="rtl" data-testid="chat-page">
+        <div className="h-screen w-screen overflow-hidden flex" dir="rtl" data-testid="chat-page">
             {/* Sidebar */}
-            <div className="w-80 border-l border-border bg-card flex flex-col" data-testid="sidebar">
-                {/* Header */}
-                <div className="p-4 glass flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                            <AvatarFallback className="bg-primary/10 text-primary">
-                                {user?.display_name?.[0]?.toUpperCase()}
-                            </AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <p className="font-medium text-sm">{user?.display_name}</p>
-                            <p className="text-xs text-muted-foreground">آنلاین</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={toggleTheme}
-                            data-testid="theme-toggle"
-                            className="h-9 w-9"
-                        >
-                            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={handleLogout}
-                            data-testid="logout-btn"
-                            className="h-9 w-9 text-destructive hover:text-destructive"
-                        >
-                            <LogOut className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
-
-                {/* User List */}
-                <ScrollArea className="flex-1">
-                    <div className="p-3">
-                        <p className="text-xs font-medium text-muted-foreground mb-3 px-2">کاربران</p>
-                        {users.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground text-sm">
-                                هنوز کاربر دیگری ثبت‌نام نکرده
+            <AnimatePresence>
+                {(showSidebar || !isMobile) && (
+                    <motion.div 
+                        initial={isMobile ? { x: '100%' } : false}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ type: 'tween', duration: 0.2 }}
+                        className={`${isMobile ? 'absolute inset-0 z-50' : 'w-80 border-l border-border'} bg-card flex flex-col`}
+                        data-testid="sidebar"
+                    >
+                        {/* Header */}
+                        <div className="p-4 glass flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <Avatar className="h-10 w-10">
+                                    <AvatarFallback className="bg-primary/10 text-primary">
+                                        {user?.display_name?.[0]?.toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p className="font-medium text-sm">{user?.display_name}</p>
+                                    <p className="text-xs text-muted-foreground">آنلاین</p>
+                                </div>
                             </div>
-                        ) : (
-                            users.map((u) => (
-                                <motion.button
-                                    key={u.id}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    onClick={() => selectUser(u)}
-                                    data-testid={`user-item-${u.id}`}
-                                    className={`w-full p-3 rounded-xl flex items-center gap-3 transition-colors ${
-                                        selectedUser?.id === u.id 
-                                            ? 'bg-primary/10 text-primary' 
-                                            : 'hover:bg-secondary'
-                                    }`}
+                            <div className="flex items-center gap-1">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={toggleTheme}
+                                    data-testid="theme-toggle"
+                                    className="h-9 w-9"
                                 >
-                                    <div className="relative">
-                                        <Avatar className="h-11 w-11">
-                                            <AvatarFallback className="bg-secondary">
-                                                {u.display_name?.[0]?.toUpperCase()}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        {u.is_online && <div className="online-dot" />}
+                                    {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={handleLogout}
+                                    data-testid="logout-btn"
+                                    className="h-9 w-9 text-destructive hover:text-destructive"
+                                >
+                                    <LogOut className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* User List */}
+                        <ScrollArea className="flex-1">
+                            <div className="p-3">
+                                <p className="text-xs font-medium text-muted-foreground mb-3 px-2">کاربران</p>
+                                {users.length === 0 ? (
+                                    <div className="text-center py-8 text-muted-foreground text-sm">
+                                        هنوز کاربر دیگری ثبت‌نام نکرده
                                     </div>
-                                    <div className="text-right flex-1 min-w-0">
-                                        <p className="font-medium text-sm truncate">{u.display_name}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                            {u.is_online ? 'آنلاین' : 'آفلاین'}
-                                        </p>
-                                    </div>
-                                </motion.button>
-                            ))
-                        )}
-                    </div>
-                </ScrollArea>
-            </div>
+                                ) : (
+                                    users.map((u) => (
+                                        <motion.button
+                                            key={u.id}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => selectUser(u)}
+                                            data-testid={`user-item-${u.id}`}
+                                            className={`w-full p-3 md:p-3 rounded-xl flex items-center gap-3 transition-colors ${
+                                                selectedUser?.id === u.id 
+                                                    ? 'bg-primary/10 text-primary' 
+                                                    : 'hover:bg-secondary active:bg-secondary'
+                                            }`}
+                                        >
+                                            <div className="relative">
+                                                <Avatar className="h-12 w-12 md:h-11 md:w-11">
+                                                    <AvatarFallback className="bg-secondary text-lg">
+                                                        {u.display_name?.[0]?.toUpperCase()}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                {u.is_online && <div className="online-dot" />}
+                                            </div>
+                                            <div className="text-right flex-1 min-w-0">
+                                                <p className="font-medium text-base md:text-sm truncate">{u.display_name}</p>
+                                                <p className="text-sm md:text-xs text-muted-foreground">
+                                                    {u.is_online ? 'آنلاین' : 'آفلاین'}
+                                                </p>
+                                            </div>
+                                        </motion.button>
+                                    ))
+                                )}
+                            </div>
+                        </ScrollArea>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Chat Area */}
-            <div className="flex-1 flex flex-col bg-background" data-testid="chat-area">
+            <div className={`flex-1 flex flex-col bg-background ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
                 {selectedUser ? (
                     <>
                         {/* Chat Header */}
-                        <div className="glass p-4 flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="relative">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarFallback className="bg-secondary">
-                                            {selectedUser.display_name?.[0]?.toUpperCase()}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    {selectedUser.is_online && <div className="online-dot" />}
-                                </div>
-                                <div>
-                                    <p className="font-medium">{selectedUser.display_name}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {isTyping ? (
-                                            <span className="flex items-center gap-1">
-                                                در حال تایپ
-                                                <span className="flex gap-0.5">
-                                                    <span className="typing-dot w-1 h-1 bg-primary rounded-full" />
-                                                    <span className="typing-dot w-1 h-1 bg-primary rounded-full" />
-                                                    <span className="typing-dot w-1 h-1 bg-primary rounded-full" />
-                                                </span>
+                        <div className="glass p-3 md:p-4 flex items-center gap-3">
+                            {isMobile && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={goBack}
+                                    className="h-10 w-10 shrink-0"
+                                    data-testid="back-btn"
+                                >
+                                    <ArrowRight className="h-5 w-5" />
+                                </Button>
+                            )}
+                            <div className="relative">
+                                <Avatar className="h-10 w-10">
+                                    <AvatarFallback className="bg-secondary">
+                                        {selectedUser.display_name?.[0]?.toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                {selectedUser.is_online && <div className="online-dot" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="font-medium truncate">{selectedUser.display_name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {isTyping ? (
+                                        <span className="flex items-center gap-1">
+                                            در حال تایپ
+                                            <span className="flex gap-0.5">
+                                                <span className="typing-dot w-1 h-1 bg-primary rounded-full" />
+                                                <span className="typing-dot w-1 h-1 bg-primary rounded-full" />
+                                                <span className="typing-dot w-1 h-1 bg-primary rounded-full" />
                                             </span>
-                                        ) : selectedUser.is_online ? 'آنلاین' : 'آفلاین'}
-                                    </p>
-                                </div>
+                                        </span>
+                                    ) : selectedUser.is_online ? 'آنلاین' : 'آفلاین'}
+                                </p>
                             </div>
                         </div>
 
                         {/* Messages */}
-                        <ScrollArea className="flex-1 p-4">
-                            <div className="space-y-4 max-w-3xl mx-auto">
+                        <ScrollArea className="flex-1 p-3 md:p-4">
+                            <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto">
                                 <AnimatePresence>
                                     {messages.map((msg) => (
                                         <MessageBubble
@@ -394,6 +425,7 @@ export default function ChatPage() {
                                             message={msg}
                                             isMe={msg.sender_id === user?.id}
                                             onReply={() => setReplyTo(msg)}
+                                            isMobile={isMobile}
                                         />
                                     ))}
                                 </AnimatePresence>
@@ -408,14 +440,14 @@ export default function ChatPage() {
                                     initial={{ height: 0, opacity: 0 }}
                                     animate={{ height: 'auto', opacity: 1 }}
                                     exit={{ height: 0, opacity: 0 }}
-                                    className="px-4 py-2 bg-secondary/50 border-t border-border"
+                                    className="px-3 md:px-4 py-2 bg-secondary/50 border-t border-border"
                                 >
                                     <div className="flex items-center justify-between max-w-3xl mx-auto">
-                                        <div className="reply-preview">
+                                        <div className="reply-preview flex-1 min-w-0">
                                             <p className="text-xs text-primary font-medium">
                                                 پاسخ به {replyTo.sender_name}
                                             </p>
-                                            <p className="text-sm text-muted-foreground truncate max-w-xs">
+                                            <p className="text-sm text-muted-foreground truncate">
                                                 {replyTo.type === 'text' ? replyTo.content : `[${replyTo.type}]`}
                                             </p>
                                         </div>
@@ -423,7 +455,7 @@ export default function ChatPage() {
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => setReplyTo(null)}
-                                            className="h-8 w-8"
+                                            className="h-8 w-8 shrink-0"
                                         >
                                             <X className="h-4 w-4" />
                                         </Button>
@@ -433,7 +465,7 @@ export default function ChatPage() {
                         </AnimatePresence>
 
                         {/* Input Area */}
-                        <div className="input-area p-4">
+                        <div className="input-area p-3 md:p-4">
                             <div className="max-w-3xl mx-auto">
                                 {/* Emoji Picker */}
                                 <AnimatePresence>
@@ -448,7 +480,7 @@ export default function ChatPage() {
                                                 onEmojiClick={handleEmojiClick}
                                                 theme={theme}
                                                 width="100%"
-                                                height={350}
+                                                height={isMobile ? 280 : 350}
                                                 searchPlaceholder="جستجوی ایموجی..."
                                             />
                                         </motion.div>
@@ -456,17 +488,17 @@ export default function ChatPage() {
                                 </AnimatePresence>
 
                                 {isRecording ? (
-                                    <div className="flex items-center gap-4 bg-destructive/10 rounded-2xl p-4">
-                                        <div className="relative">
-                                            <div className="recording-pulse w-12 h-12 rounded-full bg-destructive flex items-center justify-center">
-                                                <Mic className="h-5 w-5 text-white relative z-10" />
+                                    <div className="flex items-center gap-3 md:gap-4 bg-destructive/10 rounded-2xl p-3 md:p-4">
+                                        <div className="relative shrink-0">
+                                            <div className="recording-pulse w-10 h-10 md:w-12 md:h-12 rounded-full bg-destructive flex items-center justify-center">
+                                                <Mic className="h-4 w-4 md:h-5 md:w-5 text-white relative z-10" />
                                             </div>
                                         </div>
-                                        <div className="flex-1">
+                                        <div className="flex-1 min-w-0">
                                             <p className="text-sm font-medium text-destructive">در حال ضبط...</p>
                                             <p className="text-lg font-mono">{formatTime(recordingTime)}</p>
                                         </div>
-                                        <div className="flex gap-2">
+                                        <div className="flex gap-2 shrink-0">
                                             <Button
                                                 variant="outline"
                                                 size="icon"
@@ -479,14 +511,14 @@ export default function ChatPage() {
                                                         mediaRecorderRef.current.stream.getTracks().forEach(t => t.stop());
                                                     }
                                                 }}
-                                                className="rounded-full"
+                                                className="rounded-full h-10 w-10"
                                                 data-testid="cancel-recording"
                                             >
                                                 <X className="h-5 w-5" />
                                             </Button>
                                             <Button
                                                 onClick={stopRecording}
-                                                className="rounded-full"
+                                                className="rounded-full h-10 w-10"
                                                 data-testid="stop-recording"
                                             >
                                                 <Send className="h-5 w-5" />
@@ -494,13 +526,13 @@ export default function ChatPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1 md:gap-2">
                                         <Button
                                             variant="ghost"
                                             size="icon"
                                             onClick={() => setShowEmoji(!showEmoji)}
                                             data-testid="emoji-btn"
-                                            className="h-10 w-10 rounded-full"
+                                            className="h-10 w-10 rounded-full shrink-0"
                                         >
                                             <Smile className="h-5 w-5" />
                                         </Button>
@@ -509,7 +541,7 @@ export default function ChatPage() {
                                             size="icon"
                                             onClick={() => fileInputRef.current?.click()}
                                             data-testid="attach-btn"
-                                            className="h-10 w-10 rounded-full"
+                                            className="h-10 w-10 rounded-full shrink-0"
                                         >
                                             <Paperclip className="h-5 w-5" />
                                         </Button>
@@ -527,15 +559,15 @@ export default function ChatPage() {
                                                 handleTyping();
                                             }}
                                             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                                            placeholder="پیام خود را بنویسید..."
+                                            placeholder="پیام..."
                                             data-testid="message-input"
-                                            className="flex-1 rounded-full bg-secondary/50 border-0 h-11"
+                                            className="flex-1 rounded-full bg-secondary/50 border-0 h-10 md:h-11 text-base"
                                         />
                                         {newMessage.trim() ? (
                                             <Button
                                                 onClick={sendMessage}
                                                 data-testid="send-btn"
-                                                className="h-11 w-11 rounded-full"
+                                                className="h-10 w-10 md:h-11 md:w-11 rounded-full shrink-0"
                                             >
                                                 <Send className="h-5 w-5" />
                                             </Button>
@@ -544,7 +576,7 @@ export default function ChatPage() {
                                                 variant="outline"
                                                 onClick={startRecording}
                                                 data-testid="record-btn"
-                                                className="h-11 w-11 rounded-full"
+                                                className="h-10 w-10 md:h-11 md:w-11 rounded-full shrink-0"
                                             >
                                                 <Mic className="h-5 w-5" />
                                             </Button>
@@ -555,13 +587,13 @@ export default function ChatPage() {
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex items-center justify-center">
+                    <div className={`flex-1 flex items-center justify-center p-8 ${isMobile ? 'hidden' : ''}`}>
                         <div className="text-center">
-                            <div className="w-24 h-24 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
-                                <User className="w-12 h-12 text-muted-foreground" />
+                            <div className="w-20 h-20 md:w-24 md:h-24 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+                                <User className="w-10 h-10 md:w-12 md:h-12 text-muted-foreground" />
                             </div>
-                            <h2 className="font-heading text-2xl font-bold mb-2">شروع گفتگو</h2>
-                            <p className="text-muted-foreground">یک کاربر از لیست انتخاب کنید</p>
+                            <h2 className="font-heading text-xl md:text-2xl font-bold mb-2">شروع گفتگو</h2>
+                            <p className="text-muted-foreground text-sm md:text-base">یک کاربر از لیست انتخاب کنید</p>
                         </div>
                     </div>
                 )}
@@ -571,7 +603,7 @@ export default function ChatPage() {
 }
 
 // Message Bubble Component
-function MessageBubble({ message, isMe, onReply }) {
+function MessageBubble({ message, isMe, onReply, isMobile }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef(null);
     const API_BASE = process.env.REACT_APP_BACKEND_URL;
@@ -594,7 +626,7 @@ function MessageBubble({ message, isMe, onReply }) {
                     <img
                         src={`${API_BASE}${message.file_url}`}
                         alt="تصویر"
-                        className="media-preview rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
+                        className="max-w-[200px] md:max-w-[300px] rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
                         onClick={() => window.open(`${API_BASE}${message.file_url}`, '_blank')}
                     />
                 );
@@ -603,19 +635,19 @@ function MessageBubble({ message, isMe, onReply }) {
                     <video
                         src={`${API_BASE}${message.file_url}`}
                         controls
-                        className="media-preview rounded-xl"
+                        className="max-w-[200px] md:max-w-[300px] rounded-xl"
                     />
                 );
             case 'voice':
                 return (
-                    <div className="flex items-center gap-3 min-w-[200px]">
+                    <div className="flex items-center gap-2 md:gap-3 min-w-[150px] md:min-w-[200px]">
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={toggleAudio}
-                            className="h-10 w-10 rounded-full bg-white/10"
+                            className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-white/10 shrink-0"
                         >
-                            {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                            {isPlaying ? <Pause className="h-4 w-4 md:h-5 md:w-5" /> : <Play className="h-4 w-4 md:h-5 md:w-5" />}
                         </Button>
                         <div className="flex-1 flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
@@ -634,7 +666,7 @@ function MessageBubble({ message, isMe, onReply }) {
                     </div>
                 );
             default:
-                return <p className="text-sm whitespace-pre-wrap">{message.content}</p>;
+                return <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>;
         }
     };
 
@@ -646,10 +678,10 @@ function MessageBubble({ message, isMe, onReply }) {
             className={`flex ${isMe ? 'justify-start' : 'justify-end'} group`}
             data-testid={`message-${message.id}`}
         >
-            <div className={`max-w-[75%] ${isMe ? 'order-1' : 'order-2'}`}>
+            <div className={`max-w-[85%] md:max-w-[75%] ${isMe ? 'order-1' : 'order-2'}`}>
                 {/* Reply Preview */}
                 {message.reply_to && (
-                    <div className={`mb-1 px-3 py-1.5 rounded-lg text-xs ${
+                    <div className={`mb-1 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs ${
                         isMe ? 'bg-primary/20' : 'bg-secondary'
                     }`}>
                         <p className="font-medium opacity-70">{message.reply_to.sender_name}</p>
@@ -661,7 +693,7 @@ function MessageBubble({ message, isMe, onReply }) {
                 
                 {/* Message Content */}
                 <div
-                    className={`px-4 py-2.5 ${
+                    className={`px-3 md:px-4 py-2 md:py-2.5 ${
                         isMe 
                             ? 'bg-primary text-primary-foreground bubble-me' 
                             : 'bg-secondary text-secondary-foreground bubble-other'
@@ -687,17 +719,17 @@ function MessageBubble({ message, isMe, onReply }) {
             </div>
             
             {/* Reply Button */}
-            <div className={`self-center opacity-0 group-hover:opacity-100 transition-opacity ${
-                isMe ? 'order-2 mr-2' : 'order-1 ml-2'
+            <div className={`self-center ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity ${
+                isMe ? 'order-2 mr-1 md:mr-2' : 'order-1 ml-1 md:ml-2'
             }`}>
                 <Button
                     variant="ghost"
                     size="icon"
                     onClick={onReply}
-                    className="h-8 w-8 rounded-full"
+                    className="h-7 w-7 md:h-8 md:w-8 rounded-full"
                     data-testid={`reply-btn-${message.id}`}
                 >
-                    <Reply className="h-4 w-4" />
+                    <Reply className="h-3 w-3 md:h-4 md:w-4" />
                 </Button>
             </div>
         </motion.div>
