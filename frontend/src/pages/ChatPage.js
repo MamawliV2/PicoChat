@@ -177,10 +177,18 @@ export default function ChatPage() {
         return () => clearInterval(interval);
     }, [selectedUser]);
 
-    // Scroll to bottom
+    // Scroll to bottom - فقط وقتی پیام جدید اضافه شد
+    const prevMessagesCount = useRef(0);
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages]);
+        // فقط اگر تعداد پیام‌ها بیشتر شد، اسکرول کن
+        if (messages.length > prevMessagesCount.current) {
+            // با تاخیر کوتاه برای جلوگیری از اسکرول ناگهانی
+            setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+        prevMessagesCount.current = messages.length;
+    }, [messages.length]);
 
     // Select user and get/create conversation
     const selectUser = async (selectedUserData) => {
