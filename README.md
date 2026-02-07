@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 <p align="center">
   <img src="https://img.icons8.com/fluency/96/chat.png" alt="PicoChat Logo" width="80"/>
 </p>
@@ -37,18 +39,46 @@
 
 ## ✨ امکانات
 
-| امکان | توضیحات |
-|-------|---------|
-| 🔐 **احراز هویت امن** | ثبت‌نام و ورود با نام کاربری و رمز عبور (JWT) |
-| ⚡ **پیام‌رسانی آنی** | ارسال و دریافت پیام real-time با WebSocket |
-| 📷 **ارسال مدیا** | پشتیبانی از عکس، فیلم و فایل |
-| 🎤 **پیام صوتی** | ضبط و ارسال پیام صوتی |
-| 💬 **ریپلای** | پاسخ به پیام‌های قبلی |
-| 😊 **ایموجی** | انتخاب‌گر ایموجی با جستجو |
-| 🌙 **تم تاریک/روشن** | قابلیت تغییر تم با ذخیره در مرورگر |
-| 🟢 **وضعیت آنلاین** | نمایش آنلاین/آفلاین کاربران |
-| ✅ **وضعیت پیام** | نمایش ارسال شده/خوانده شده |
-| 🌍 **RTL کامل** | پشتیبانی کامل از زبان فارسی |
+<table>
+<tr>
+<td width="50%">
+
+### 🔐 احراز هویت امن
+ثبت‌نام و ورود با نام کاربری و رمز عبور (JWT)
+
+### ⚡ پیام‌رسانی آنی
+ارسال و دریافت پیام لحظه‌ای با WebSocket
+
+### 📷 ارسال مدیا
+پشتیبانی از عکس، فیلم و فایل
+
+### 🎤 پیام صوتی
+ضبط و ارسال پیام صوتی
+
+### 💬 ریپلای
+پاسخ به پیام‌های قبلی
+
+</td>
+<td width="50%">
+
+### 😊 ایموجی
+انتخاب‌گر ایموجی با قابلیت جستجو
+
+### 🌙 تم تاریک/روشن
+قابلیت تغییر تم با ذخیره در مرورگر
+
+### 🟢 وضعیت آنلاین
+نمایش آنلاین/آفلاین کاربران
+
+### ✅ وضعیت پیام
+نمایش ارسال شده/خوانده شده
+
+### 🌍 پشتیبانی RTL
+پشتیبانی کامل از زبان فارسی
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -66,46 +96,48 @@ curl -fsSL https://raw.githubusercontent.com/MamawliV2/PicoChat/main/install.sh 
 chmod +x install.sh && sudo ./install.sh
 ```
 
-> 📝 اسکریپت نصب به صورت تعاملی تمام تنظیمات را از شما می‌پرسد.
+> 📝 **نکته:** اسکریپت نصب به صورت تعاملی تمام تنظیمات را از شما می‌پرسد.
 
 ### گزینه‌های اسکریپت
 
-```bash
-./install.sh              # نصب
-./install.sh --help       # راهنما  
-./install.sh --uninstall  # حذف کامل
-```
+| دستور | توضیحات |
+|-------|---------|
+| `./install.sh` | نصب برنامه |
+| `./install.sh --help` | نمایش راهنما |
+| `./install.sh --uninstall` | حذف کامل |
 
 ---
 
 ## 📋 پیش‌نیازها
 
+> 💡 **نکته:** اسکریپت نصب به صورت خودکار تمام پیش‌نیازها را نصب می‌کند.
+
 | نرم‌افزار | نسخه | توضیحات |
-|-----------|------|---------|
-| Ubuntu/Debian | 20.04+ | یا توزیع‌های مشابه |
-| Python | 3.11+ | برای backend |
-| Node.js | 18+ | برای frontend |
-| MongoDB | 6.0+ | دیتابیس |
+|-----------|:------:|---------|
+| Ubuntu/Debian | +20.04 | یا توزیع‌های مشابه |
+| Python | +3.11 | برای بک‌اند |
+| Node.js | +18 | برای فرانت‌اند |
+| MongoDB | +6.0 | دیتابیس |
 | Nginx | - | (اختیاری) برای reverse proxy |
 | Certbot | - | (اختیاری) برای SSL |
-
-> 💡 اسکریپت نصب به صورت خودکار تمام پیش‌نیازها را نصب می‌کند.
 
 ---
 
 ## 🔧 نصب دستی
 
 <details>
-<summary><b>کلیک کنید برای مشاهده نصب دستی</b></summary>
+<summary><b>📖 کلیک کنید برای مشاهده نصب دستی</b></summary>
 
-### 1. کلون پروژه
+<br>
+
+### ۱. کلون پروژه
 
 ```bash
 git clone https://github.com/MamawliV2/PicoChat.git
 cd PicoChat
 ```
 
-### 2. تنظیم Backend
+### ۲. تنظیم Backend
 
 ```bash
 cd backend
@@ -122,7 +154,7 @@ cp .env.example .env
 nano .env
 ```
 
-محتوای `.env`:
+**محتوای فایل `.env`:**
 ```env
 MONGO_URL=mongodb://localhost:27017
 DB_NAME=picochat
@@ -130,7 +162,7 @@ JWT_SECRET=your-super-secret-key-change-this
 CORS_ORIGINS=*
 ```
 
-### 3. تنظیم Frontend
+### ۳. تنظیم Frontend
 
 ```bash
 cd ../frontend
@@ -143,31 +175,30 @@ cp .env.example .env
 nano .env
 ```
 
-محتوای `.env`:
+**محتوای فایل `.env`:**
 ```env
 REACT_APP_BACKEND_URL=http://your-server-ip:8001
 ```
 
-### 4. نصب و راه‌اندازی MongoDB
+### ۴. نصب MongoDB
 
 ```bash
-# Ubuntu/Debian
 sudo apt update
 sudo apt install -y mongodb
 sudo systemctl start mongodb
 sudo systemctl enable mongodb
 ```
 
-### 5. اجرای برنامه
+### ۵. اجرای برنامه
 
-ترمینال ۱ - Backend:
+**ترمینال ۱ - Backend:**
 ```bash
 cd backend
 source venv/bin/activate
 uvicorn server:app --host 0.0.0.0 --port 8001
 ```
 
-ترمینال ۲ - Frontend:
+**ترمینال ۲ - Frontend:**
 ```bash
 cd frontend
 yarn start
@@ -180,7 +211,9 @@ yarn start
 ## 🐳 نصب با Docker
 
 <details>
-<summary><b>کلیک کنید برای مشاهده نصب Docker</b></summary>
+<summary><b>📖 کلیک کنید برای مشاهده نصب Docker</b></summary>
+
+<br>
 
 ```bash
 # کلون پروژه
@@ -194,7 +227,7 @@ export JWT_SECRET=$(openssl rand -hex 32)
 docker-compose up -d
 ```
 
-فایل `docker-compose.yml`:
+**فایل `docker-compose.yml`:**
 ```yaml
 version: '3.8'
 
@@ -237,50 +270,52 @@ volumes:
 
 ## 📡 مستندات API
 
-### احراز هویت
+### 🔐 احراز هویت
 
 | متد | مسیر | توضیحات |
-|-----|------|---------|
+|:---:|------|---------|
 | `POST` | `/api/auth/register` | ثبت‌نام کاربر جدید |
 | `POST` | `/api/auth/login` | ورود به حساب |
 | `GET` | `/api/auth/me` | دریافت اطلاعات کاربر فعلی |
 | `POST` | `/api/auth/logout` | خروج از حساب |
 
-### کاربران
+### 👥 کاربران
 
 | متد | مسیر | توضیحات |
-|-----|------|---------|
+|:---:|------|---------|
 | `GET` | `/api/users` | لیست همه کاربران |
 | `GET` | `/api/users/{id}` | اطلاعات یک کاربر |
 
-### مکالمات
+### 💬 مکالمات
 
 | متد | مسیر | توضیحات |
-|-----|------|---------|
+|:---:|------|---------|
 | `GET` | `/api/conversations` | لیست مکالمات کاربر |
 | `POST` | `/api/conversations/{user_id}` | ایجاد/دریافت مکالمه |
 
-### پیام‌ها
+### ✉️ پیام‌ها
 
 | متد | مسیر | توضیحات |
-|-----|------|---------|
+|:---:|------|---------|
 | `GET` | `/api/messages/{conv_id}` | دریافت پیام‌های مکالمه |
 | `POST` | `/api/messages/{conv_id}` | ارسال پیام متنی |
 | `POST` | `/api/upload/{conv_id}` | آپلود فایل/مدیا |
 
-### WebSocket
+### 🔌 WebSocket
 
 ```
 WS /ws/{token}
 ```
 
 **انواع پیام:**
-- `message` - ارسال پیام جدید
-- `typing` - نمایش در حال تایپ
-- `read` - علامت‌گذاری به عنوان خوانده شده
+- `message` — ارسال پیام جدید
+- `typing` — نمایش در حال تایپ
+- `read` — علامت‌گذاری به عنوان خوانده شده
 
 <details>
-<summary><b>نمونه درخواست‌ها</b></summary>
+<summary><b>📝 نمونه درخواست‌ها</b></summary>
+
+<br>
 
 **ثبت‌نام:**
 ```bash
@@ -312,12 +347,12 @@ curl -X POST http://localhost:8001/api/messages/{conv_id} \
 
 ```
 PicoChat/
-├── backend/
+├── 📂 backend/
 │   ├── server.py          # سرور اصلی FastAPI
 │   ├── requirements.txt   # وابستگی‌های Python
 │   ├── uploads/           # فایل‌های آپلود شده
 │   └── .env              # متغیرهای محیطی
-├── frontend/
+├── 📂 frontend/
 │   ├── src/
 │   │   ├── components/   # کامپوننت‌های UI
 │   │   ├── contexts/     # Context های React
@@ -325,9 +360,10 @@ PicoChat/
 │   │   └── App.js        # کامپوننت اصلی
 │   ├── package.json
 │   └── .env
-├── install.sh            # اسکریپت نصب خودکار
-├── docker-compose.yml    # تنظیمات Docker
-└── README.md
+├── 📄 install.sh         # اسکریپت نصب خودکار
+├── 📄 docker-compose.yml # تنظیمات Docker
+├── 📄 LICENSE
+└── 📄 README.md
 ```
 
 ---
@@ -337,7 +373,7 @@ PicoChat/
 ### متغیرهای محیطی Backend
 
 | متغیر | توضیحات | پیش‌فرض |
-|-------|---------|---------|
+|-------|---------|:-------:|
 | `MONGO_URL` | آدرس اتصال MongoDB | `mongodb://localhost:27017` |
 | `DB_NAME` | نام دیتابیس | `picochat` |
 | `JWT_SECRET` | کلید رمزنگاری JWT | **الزامی** |
@@ -346,18 +382,20 @@ PicoChat/
 ### متغیرهای محیطی Frontend
 
 | متغیر | توضیحات | پیش‌فرض |
-|-------|---------|---------|
+|-------|---------|:-------:|
 | `REACT_APP_BACKEND_URL` | آدرس API Backend | **الزامی** |
 
 ---
 
 ## 🔒 امنیت
 
-- ✅ رمزنگاری پسوردها با bcrypt
-- ✅ احراز هویت JWT با انقضا ۳۰ روزه
-- ✅ محافظت CORS
-- ✅ اعتبارسنجی ورودی‌ها با Pydantic
-- ✅ WebSocket با احراز هویت
+| ویژگی | وضعیت |
+|-------|:-----:|
+| رمزنگاری پسوردها با bcrypt | ✅ |
+| احراز هویت JWT با انقضا ۳۰ روزه | ✅ |
+| محافظت CORS | ✅ |
+| اعتبارسنجی ورودی‌ها با Pydantic | ✅ |
+| WebSocket با احراز هویت | ✅ |
 
 ### ⚠️ نکات امنیتی مهم
 
@@ -369,8 +407,6 @@ PicoChat/
 2. **HTTPS**: در محیط production حتماً SSL فعال کنید
 
 3. **Firewall**: پورت‌های غیرضروری را ببندید
-
-4. **MongoDB**: احراز هویت MongoDB را فعال کنید
 
 ---
 
@@ -400,7 +436,9 @@ sudo ./install.sh --uninstall
 ## 🐛 عیب‌یابی
 
 <details>
-<summary><b>مشکلات رایج</b></summary>
+<summary><b>📖 مشکلات رایج</b></summary>
+
+<br>
 
 ### Backend بالا نمی‌آید
 ```bash
@@ -420,10 +458,9 @@ sudo systemctl status mongodb
 - مطمئن شوید آدرس frontend صحیح است
 
 ### آپلود فایل کار نمی‌کند
-- دسترسی پوشه `uploads` را بررسی کنید:
-  ```bash
-  chmod 755 /opt/picochat/backend/uploads
-  ```
+```bash
+chmod 755 /opt/picochat/backend/uploads
+```
 
 </details>
 
@@ -431,15 +468,15 @@ sudo systemctl status mongodb
 
 ## 🤝 مشارکت
 
-از مشارکت شما استقبال می‌کنیم! 
+از مشارکت شما استقبال می‌کنیم!
 
-1. Fork کنید
-2. Branch جدید بسازید (`git checkout -b feature/amazing-feature`)
-3. Commit کنید (`git commit -m 'Add amazing feature'`)
-4. Push کنید (`git push origin feature/amazing-feature`)
-5. Pull Request بسازید
+1. پروژه را Fork کنید
+2. یک Branch جدید بسازید: `git checkout -b feature/amazing-feature`
+3. تغییرات را Commit کنید: `git commit -m 'Add amazing feature'`
+4. به ریپو Push کنید: `git push origin feature/amazing-feature`
+5. یک Pull Request بسازید
 
-### گزارش باگ
+### 🐛 گزارش باگ
 
 لطفاً از [Issues](https://github.com/MamawliV2/PicoChat/issues) استفاده کنید.
 
@@ -447,42 +484,7 @@ sudo systemctl status mongodb
 
 ## 📄 لایسنس
 
-این پروژه تحت لایسنس [MIT](LICENSE) منتشر شده است.
-
-```
-MIT License
-
-Copyright (c) 2024 MamawliV2
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
----
-
-## 🙏 تشکر
-
-- [FastAPI](https://fastapi.tiangolo.com/) - فریمورک backend
-- [React](https://react.dev/) - فریمورک frontend
-- [Tailwind CSS](https://tailwindcss.com/) - استایل‌دهی
-- [Shadcn/UI](https://ui.shadcn.com/) - کامپوننت‌ها
-- [Lucide Icons](https://lucide.dev/) - آیکون‌ها
-- [MongoDB](https://www.mongodb.com/) - دیتابیس
+این پروژه تحت لایسنس **MIT** منتشر شده است.
 
 ---
 
@@ -490,7 +492,7 @@ SOFTWARE.
 
 - 📧 ایمیل: mamawli@proton.me
 - 🐙 GitHub Issues: [لینک](https://github.com/MamawliV2/PicoChat/issues)
-- 💬 تلگرام: [@MamawliV2](https://t.me/your_telegram)
+- 💬 تلگرام: [@MamawliV2](https://t.me/MamawliV2)
 
 ---
 
@@ -499,5 +501,7 @@ SOFTWARE.
 </p>
 
 <p align="center">
-  <a href="#-picochat">⬆️ برگشت به بالا</a>
+  <a href="#">⬆️ برگشت به بالا</a>
 </p>
+
+</div>
