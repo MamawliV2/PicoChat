@@ -508,11 +508,20 @@ export default function ChatPage() {
             </AnimatePresence>
 
             {/* Chat Area */}
-            <div className={`flex-1 flex flex-col bg-background min-h-0 relative ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
+            <div className={`flex-1 bg-background relative ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
                 {selectedUser ? (
-                    <div className="absolute inset-0 flex flex-col">
-                        {/* Chat Header - Fixed */}
-                        <div className="bg-card border-b border-border p-3 md:p-4 flex items-center gap-3 z-20">
+                    <>
+                        {/* Chat Header - واقعاً Fixed */}
+                        <div 
+                            className="fixed top-0 left-0 right-0 bg-card border-b border-border p-3 md:p-4 flex items-center gap-3 z-50"
+                            style={{ 
+                                position: 'fixed',
+                                top: 0,
+                                right: isMobile ? 0 : 'auto',
+                                left: isMobile ? 0 : '320px',
+                                width: isMobile ? '100%' : 'calc(100% - 320px)'
+                            }}
+                        >
                             {isMobile && (
                                 <Button
                                     variant="ghost"
@@ -549,9 +558,12 @@ export default function ChatPage() {
                             </div>
                         </div>
 
-                        {/* Messages - Scrollable */}
-                        <div className="flex-1 overflow-y-auto p-3 md:p-4 overscroll-contain">
-                            <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto pb-4">
+                        {/* Messages - Scrollable با padding برای هدر و input */}
+                        <div 
+                            className="absolute inset-0 overflow-y-auto p-3 md:p-4 overscroll-contain"
+                            style={{ paddingTop: '70px', paddingBottom: '80px' }}
+                        >
+                            <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto">
                                 {messages.map((msg) => (
                                     <MessageBubble
                                         key={msg.id}
