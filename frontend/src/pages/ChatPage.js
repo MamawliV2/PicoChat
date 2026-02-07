@@ -184,7 +184,12 @@ export default function ChatPage() {
         return () => clearInterval(interval);
     }, [selectedUser]);
 
-    // بدون اسکرول خودکار - کاربر خودش اسکرول می‌کنه
+    // اسکرول به آخرین پیام
+    const scrollToBottom = () => {
+        setTimeout(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+    };
 
     // Select user and get/create conversation
     const selectUser = async (selectedUserData) => {
@@ -196,6 +201,11 @@ export default function ChatPage() {
             
             const messagesResponse = await axios.get(`${API}/api/messages/${convResponse.data.id}`);
             setMessages(messagesResponse.data);
+            
+            // اسکرول به آخرین پیام بعد از لود شدن
+            setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+            }, 200);
         } catch (error) {
             toast.error('خطا در بارگذاری پیام‌ها');
         }
