@@ -149,6 +149,11 @@ export default function ChatPage() {
                         return prev;
                     }
                     
+                    // اسکرول به آخرین پیام وقتی پیام جدید اومد
+                    setTimeout(() => {
+                        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                    
                     // فقط پیام‌های جدید رو به آخر اضافه کن
                     const withoutTemp = prev.filter(m => !m.id.startsWith('temp-'));
                     return [...withoutTemp, ...newMessages];
