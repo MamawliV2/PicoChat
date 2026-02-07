@@ -29,8 +29,8 @@
 ## 📸 پیش‌نمایش
 
 <p align="center">
-  <img src="docs/screenshots/login.png" alt="صفحه ورود" width="45%"/>
-  <img src="docs/screenshots/chat-dark.png" alt="چت - تم تاریک" width="45%"/>
+  <img src="docs/screenshots/login.jpeg" alt="صفحه ورود" width="45%"/>
+  <img src="docs/screenshots/chat-dark.jpeg" alt="چت - تم تاریک" width="45%"/>
 </p>
 
 ---
