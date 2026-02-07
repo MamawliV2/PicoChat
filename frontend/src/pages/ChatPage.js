@@ -380,7 +380,7 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="h-screen w-screen overflow-hidden flex" dir="rtl" data-testid="chat-page">
+        <div className="fixed inset-0 flex" dir="rtl" data-testid="chat-page" style={{ height: '100dvh' }}>
             {/* Sidebar */}
             <AnimatePresence>
                 {(showSidebar || !isMobile) && (
