@@ -87,13 +87,15 @@
 ### نصب با یک دستور (پیشنهادی)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/MamawliV2/PicoChat/main/install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/MamawliV2/PicoChat/main/install.sh -o install.sh && chmod +x install.sh && sudo ./install.sh
 ```
 
-یا اگر فایل را دانلود کرده‌اید:
+یا دانلود دستی:
 
 ```bash
-chmod +x install.sh && sudo ./install.sh
+wget https://raw.githubusercontent.com/MamawliV2/PicoChat/main/install.sh
+chmod +x install.sh
+sudo ./install.sh
 ```
 
 > 📝 **نکته:** اسکریپت نصب به صورت تعاملی تمام تنظیمات را از شما می‌پرسد.
