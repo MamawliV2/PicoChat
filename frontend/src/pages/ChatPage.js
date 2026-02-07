@@ -508,11 +508,11 @@ export default function ChatPage() {
             </AnimatePresence>
 
             {/* Chat Area */}
-            <div className={`flex-1 flex flex-col bg-background min-h-0 ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
+            <div className={`flex-1 flex flex-col bg-background min-h-0 relative ${isMobile && showSidebar ? 'hidden' : ''}`} data-testid="chat-area">
                 {selectedUser ? (
-                    <>
-                        {/* Chat Header */}
-                        <div className="shrink-0 bg-card border-b border-border p-3 md:p-4 flex items-center gap-3 sticky top-0 z-10">
+                    <div className="absolute inset-0 flex flex-col">
+                        {/* Chat Header - Fixed */}
+                        <div className="bg-card border-b border-border p-3 md:p-4 flex items-center gap-3 z-20">
                             {isMobile && (
                                 <Button
                                     variant="ghost"
@@ -549,8 +549,8 @@ export default function ChatPage() {
                             </div>
                         </div>
 
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-3 md:p-4">
+                        {/* Messages - Scrollable */}
+                        <div className="flex-1 overflow-y-auto p-3 md:p-4 overscroll-contain">
                             <div className="space-y-3 md:space-y-4 max-w-3xl mx-auto pb-4">
                                 {messages.map((msg) => (
                                     <MessageBubble
