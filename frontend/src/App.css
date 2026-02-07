@@ -2,6 +2,20 @@
 .chat-container {
     display: flex;
     height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+/* Mobile viewport fix */
+@supports (height: 100dvh) {
+    .h-dvh {
+        height: 100dvh !important;
+    }
+}
+
+html, body, #root {
+    height: 100%;
+    height: 100dvh;
     overflow: hidden;
 }
 
