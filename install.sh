@@ -298,7 +298,7 @@ clone_project() {
             cp -r ./frontend "$INSTALL_DIR/"
         else
             # کلون از گیت‌هاب
-            git clone https://github.com/YOUR_USERNAME/PicoChat.git "$INSTALL_DIR"
+            git clone https://github.com/MamawliV2/PicoChat.git "$INSTALL_DIR"
         fi
     fi
     

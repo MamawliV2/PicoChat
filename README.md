@@ -57,7 +57,7 @@
 ### نصب با یک دستور (پیشنهادی)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/PicoChat/main/install.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/MamawliV2/PicoChat/main/install.sh | sudo bash
 ```
 
 یا اگر فایل را دانلود کرده‌اید:
@@ -101,7 +101,7 @@ chmod +x install.sh && sudo ./install.sh
 ### 1. کلون پروژه
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/PicoChat.git
+git clone https://github.com/MamawliV2/PicoChat.git
 cd PicoChat
 ```
 
@@ -184,7 +184,7 @@ yarn start
 
 ```bash
 # کلون پروژه
-git clone https://github.com/YOUR_USERNAME/PicoChat.git
+git clone https://github.com/MamawliV2/PicoChat.git
 cd PicoChat
 
 # تنظیم متغیرهای محیطی
@@ -441,7 +441,7 @@ sudo systemctl status mongodb
 
 ### گزارش باگ
 
-لطفاً از [Issues](https://github.com/YOUR_USERNAME/PicoChat/issues) استفاده کنید.
+لطفاً از [Issues](https://github.com/MamawliV2/PicoChat/issues) استفاده کنید.
 
 ---
 
@@ -489,7 +489,7 @@ SOFTWARE.
 ## 📞 پشتیبانی
 
 - 📧 ایمیل: your.email@example.com
-- 🐙 GitHub Issues: [لینک](https://github.com/YOUR_USERNAME/PicoChat/issues)
+- 🐙 GitHub Issues: [لینک](https://github.com/MamawliV2/PicoChat/issues)
 - 💬 تلگرام: [@your_telegram](https://t.me/your_telegram)
 
 ---
