@@ -561,7 +561,7 @@ export default function ChatPage() {
                         </AnimatePresence>
 
                         {/* Input Area */}
-                        <div className="shrink-0 bg-card border-t border-border p-3 md:p-4">
+                        <div className="shrink-0 bg-card border-t border-border p-3 md:p-4" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
                             <div className="max-w-3xl mx-auto">
                                 {/* Emoji Picker */}
                                 <AnimatePresence>
